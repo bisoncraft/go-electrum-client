@@ -8,7 +8,7 @@ import (
 	"strconv"
 	"sync"
 
-	"github.com/dev-warrior777/go-electrum-client/wallet"
+	"github.com/bisoncraft/go-electrum-client/wallet"
 )
 
 type KeysDB struct {

@@ -41,3 +41,5 @@ package electrumx
 //      fails.
 //   2. If promoting a running peer to leader it should failover to another peer
 //      so that network can try to start another leader in network.go:checkLeader.
+
+// THE ABOVE IS FOR BTC .. WE EXPECT SHENANNIGANS!

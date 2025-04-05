@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"sync"
 
-	"github.com/dev-warrior777/go-electrum-client/wallet"
+	"github.com/bisoncraft/go-electrum-client/wallet"
 )
 
 type SubscriptionsDB struct {

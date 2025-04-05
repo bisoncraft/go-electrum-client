@@ -14,9 +14,6 @@
 # Output of the go coverage tool, specifically when used with LiteIDE
 *.out
 
-# Dependency directories (remove the comment below to include it)
-# vendor/
-
 # Go workspace file
 go.work
 go.work.sum
@@ -28,27 +25,28 @@ cmd/rmwallet-btc/rmwallet-btc
 cmd/goele-firo/goele-firo
 cmd/mkwallet-firo/mkwallet-firo
 cmd/rmwallet-firo/rmwallet-firo
+cmd/goele-dash/goele-btc
+cmd/mkwallet-dash/mkwallet-btc
+cmd/rmwallet-dash/rmwallet-btc
 wallet/cmd/boltdmp/bd
 wallet/cmd/boltdmp/boltdmp
 client/btc/rpc_test/client
 client/firo/rpc_test/client
+client/dash/rpc_test/client
 
 #profiling
 cmd/goele-btc/goele-btc.prof
 cmd/goele-btc/tmp/
 cmd/goele-firo/goele-firo.prof
 cmd/goele-firo/tmp/
+cmd/goele-dash/goele-firo.prof
+cmd/goele-dash/tmp/
 
 #vscode
 .vscode/
 __debug_bin*
 
-#kept spv related versions of files being changed
-*.spv
-
-#kept orig related versions of files being changed
-*.orig
-
 #scratchpads
 wallet/wltfiro/_scratchpad.txt
+wallet/wltdash/_scratchpad.txt
 electrumx/elxfiro/_scratchpad.txt

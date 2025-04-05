@@ -7,8 +7,8 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/bisoncraft/go-electrum-client/wallet"
 	"github.com/btcsuite/btcd/btcutil"
-	"github.com/dev-warrior777/go-electrum-client/wallet"
 )
 
 // Import UTXO's for a known privkey from another wallet from electrumX. Partially

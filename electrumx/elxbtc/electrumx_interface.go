@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"io"
 
+	"github.com/bisoncraft/go-electrum-client/electrumx"
 	"github.com/btcsuite/btcd/wire"
-	"github.com/dev-warrior777/go-electrum-client/electrumx"
 )
 
 // These configure ElectrumX network for: BTC

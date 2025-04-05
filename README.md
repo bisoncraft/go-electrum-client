@@ -18,7 +18,7 @@ __Goele__ - Golang Electrum Client
 
 ## Development example
 
-The __goele__ example app can be found at `cmd/goele/`. This is the tool I have been using for functional testing.
+The __goele__ example app can be found at `cmd/goele-btc/`. This is the tool I have been using for functional testing.
 
 If running against regtest network then it is dependent upon the _BTC ElectrumX RegTest Simnet Harness_ found in `client/btc/test_harness`.
 

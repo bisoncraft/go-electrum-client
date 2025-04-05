@@ -8,12 +8,12 @@ import (
 	"testing"
 	"time"
 
+	"github.com/bisoncraft/go-electrum-client/wallet"
 	"github.com/btcsuite/btcd/btcec/v2"
 	"github.com/btcsuite/btcd/btcutil/hdkeychain"
 	"github.com/btcsuite/btcd/chaincfg"
 	"github.com/btcsuite/btcd/chaincfg/chainhash"
 	"github.com/btcsuite/btcd/wire"
-	"github.com/dev-warrior777/go-electrum-client/wallet"
 	"github.com/tyler-smith/go-bip39"
 )
 

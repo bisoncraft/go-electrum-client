@@ -6,10 +6,10 @@ import (
 	"encoding/hex"
 	"errors"
 
+	"github.com/bisoncraft/go-electrum-client/wallet"
 	"github.com/btcsuite/btcd/btcutil"
 	"github.com/btcsuite/btcd/chaincfg"
 	"github.com/btcsuite/btcd/txscript"
-	"github.com/dev-warrior777/go-electrum-client/wallet"
 )
 
 /////////////////////////////////////////////////////////////////////////

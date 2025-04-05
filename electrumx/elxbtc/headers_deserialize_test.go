@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/dev-warrior777/go-electrum-client/electrumx"
+	"github.com/bisoncraft/go-electrum-client/electrumx"
 )
 
 // Data taken from btc regtest which has a block size 0f 80 and nonce 0

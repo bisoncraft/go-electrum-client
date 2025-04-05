@@ -7,13 +7,13 @@ import (
 	"sync"
 	"time"
 
+	"github.com/bisoncraft/go-electrum-client/wallet"
 	"github.com/btcsuite/btcd/blockchain"
 	"github.com/btcsuite/btcd/btcutil"
 	"github.com/btcsuite/btcd/chaincfg"
 	"github.com/btcsuite/btcd/chaincfg/chainhash"
 	"github.com/btcsuite/btcd/txscript"
 	"github.com/btcsuite/btcd/wire"
-	"github.com/dev-warrior777/go-electrum-client/wallet"
 )
 
 type TxStore struct {

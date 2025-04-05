@@ -1,8 +1,8 @@
 package wltfiro
 
 import (
+	"github.com/bisoncraft/go-electrum-client/wallet"
 	"github.com/btcsuite/btcd/chaincfg"
-	"github.com/dev-warrior777/go-electrum-client/wallet"
 )
 
 type SubscriptionManager struct {

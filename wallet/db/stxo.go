@@ -7,9 +7,9 @@ import (
 	"strings"
 	"sync"
 
+	"github.com/bisoncraft/go-electrum-client/wallet"
 	"github.com/btcsuite/btcd/chaincfg/chainhash"
 	"github.com/btcsuite/btcd/wire"
-	"github.com/dev-warrior777/go-electrum-client/wallet"
 )
 
 type StxoDB struct {

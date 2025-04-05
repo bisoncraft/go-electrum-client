@@ -13,8 +13,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/dev-warrior777/go-electrum-client/client"
-	"github.com/dev-warrior777/go-electrum-client/wallet"
+	"github.com/bisoncraft/go-electrum-client/client"
+	"github.com/bisoncraft/go-electrum-client/wallet"
 	"github.com/spf13/cast"
 )
 

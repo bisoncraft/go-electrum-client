@@ -1,0 +1,38 @@
+[
+    {
+      "net": "ssl",
+      "addr": "electrumx.firo01.org:50002",
+      "host": "electrumx01.firo.org",
+      "is_onion": false,
+      "version": "1.4",
+      "caps": "",
+      "rep": 0
+    },
+    {
+      "net": "ssl",
+      "addr": "electrumx02.firo.org:50002",
+      "host": "electrumx02.firo.org",
+      "is_onion": false,
+      "version": "1.4",
+      "caps": "",
+      "rep": 0
+    },
+    {
+      "net": "ssl",
+      "addr": "electrumx03.firo.org:50002",
+      "host": "electrumx03.firo.org",
+      "is_onion": false,
+      "version": "1.4",
+      "caps": "",
+      "rep": 0
+    },
+    {
+      "net": "ssl",
+      "addr": "electrumx.firo.org:50002",
+      "host": "electrumx.firo.org",
+      "is_onion": false,
+      "version": "1.4",
+      "caps": "",
+      "rep": 0
+    }
+]

@@ -3,10 +3,10 @@ package wltbtc
 import (
 	"errors"
 
+	"github.com/bisoncraft/go-electrum-client/client"
+	"github.com/bisoncraft/go-electrum-client/wallet"
 	hd "github.com/btcsuite/btcd/btcutil/hdkeychain"
 	"github.com/btcsuite/btcd/chaincfg"
-	"github.com/dev-warrior777/go-electrum-client/client"
-	"github.com/dev-warrior777/go-electrum-client/wallet"
 )
 
 // Lookahead window size from client constants

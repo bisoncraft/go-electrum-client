@@ -5,8 +5,8 @@ import (
 	"encoding/hex"
 	"fmt"
 
-	"github.com/dev-warrior777/go-electrum-client/client"
-	"github.com/dev-warrior777/go-electrum-client/wallet"
+	"github.com/bisoncraft/go-electrum-client/client"
+	"github.com/bisoncraft/go-electrum-client/wallet"
 )
 
 // RescanWallet asks ElectrumX for info for our wallet keys back to latest

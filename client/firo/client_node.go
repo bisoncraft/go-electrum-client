@@ -4,7 +4,7 @@ import (
 	"context"
 	"encoding/hex"
 
-	"github.com/dev-warrior777/go-electrum-client/electrumx"
+	"github.com/bisoncraft/go-electrum-client/electrumx"
 )
 
 // Note: The below are walletless server queries, results are not checked by SPV.

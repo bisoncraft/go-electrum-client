@@ -71,9 +71,10 @@ const (
 	REGTEST = "regtest"
 )
 
-const (
-	COIN_BTC = "btc"
-)
+// TODO: remove
+// const (
+// 	COIN_BTC = "btc"
+// )
 
 // Assumption: all hashes are 32 bytes long
 const HashSize = 32

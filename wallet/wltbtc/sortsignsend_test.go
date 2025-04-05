@@ -5,12 +5,12 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/bisoncraft/go-electrum-client/wallet"
 	"github.com/btcsuite/btcd/btcutil"
 	"github.com/btcsuite/btcd/chaincfg"
 	"github.com/btcsuite/btcd/chaincfg/chainhash"
 	"github.com/btcsuite/btcd/txscript"
 	"github.com/btcsuite/btcd/wire"
-	"github.com/dev-warrior777/go-electrum-client/wallet"
 )
 
 // var test_mnemonic = "jungle pair grass super coral bubble tomato sheriff pulp cancel luggage wagon"

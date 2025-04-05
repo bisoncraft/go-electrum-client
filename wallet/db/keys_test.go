@@ -6,8 +6,8 @@ import (
 	"sync"
 	"testing"
 
+	"github.com/bisoncraft/go-electrum-client/wallet"
 	"github.com/decred/dcrd/crypto/rand"
-	"github.com/dev-warrior777/go-electrum-client/wallet"
 )
 
 var kdb KeysDB

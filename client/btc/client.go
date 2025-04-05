@@ -7,13 +7,13 @@ import (
 	"path"
 	"sync"
 
-	"github.com/dev-warrior777/go-electrum-client/client"
-	"github.com/dev-warrior777/go-electrum-client/electrumx"
-	"github.com/dev-warrior777/go-electrum-client/electrumx/elxbtc"
-	"github.com/dev-warrior777/go-electrum-client/wallet"
-	"github.com/dev-warrior777/go-electrum-client/wallet/bdb"
-	"github.com/dev-warrior777/go-electrum-client/wallet/db"
-	"github.com/dev-warrior777/go-electrum-client/wallet/wltbtc"
+	"github.com/bisoncraft/go-electrum-client/client"
+	"github.com/bisoncraft/go-electrum-client/electrumx"
+	"github.com/bisoncraft/go-electrum-client/electrumx/elxbtc"
+	"github.com/bisoncraft/go-electrum-client/wallet"
+	"github.com/bisoncraft/go-electrum-client/wallet/bdb"
+	"github.com/bisoncraft/go-electrum-client/wallet/db"
+	"github.com/bisoncraft/go-electrum-client/wallet/wltbtc"
 )
 
 // BtcElectrumClient - implements ElectrumClient interface

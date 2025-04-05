@@ -4,10 +4,10 @@ import (
 	"encoding/hex"
 	"testing"
 
+	"github.com/bisoncraft/go-electrum-client/client"
+	"github.com/bisoncraft/go-electrum-client/wallet"
 	"github.com/btcsuite/btcd/btcutil/hdkeychain"
 	"github.com/btcsuite/btcd/chaincfg"
-	"github.com/dev-warrior777/go-electrum-client/client"
-	"github.com/dev-warrior777/go-electrum-client/wallet"
 )
 
 func createKeyManager() (*KeyManager, error) {

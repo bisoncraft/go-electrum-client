@@ -13,8 +13,8 @@ import (
 	"github.com/btcsuite/btcd/txscript"
 	"github.com/btcsuite/btcd/wire"
 
-	"github.com/dev-warrior777/go-electrum-client/electrumx"
-	"github.com/dev-warrior777/go-electrum-client/wallet"
+	"github.com/bisoncraft/go-electrum-client/electrumx"
+	"github.com/bisoncraft/go-electrum-client/wallet"
 )
 
 // Here is the client interface between the node & wallet for monitoring the
