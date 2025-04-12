@@ -47,11 +47,22 @@ var tests = [...]test{
 
 func TestSha256(t *testing.T) {
 	for i := 0; i < len(tests); i++ {
-		sha256 := calcHash(tests[i].in, sha256.New())
+		h := sha256.New()
+		_, err := h.Write(tests[i].in)
+		if err != nil {
+			t.Errorf("hasher.Write failed for sha256 - %v", err)
+		}
+		sha256 := h.Sum(nil)
 		if !bytes.Equal(sha256, tests[i].sha256) {
 			t.Fatalf("incorrect sha256 %x", sha256)
 		}
-		ripemd160 := calcHash(sha256, ripemd160.New())
+
+		r := ripemd160.New()
+		_, err = r.Write(sha256)
+		if err != nil {
+			t.Errorf("hasher.Write failed for ripemd - %v", err)
+		}
+		ripemd160 := r.Sum(nil)
 		if !bytes.Equal(ripemd160, tests[i].ripemd160) {
 			t.Fatalf("incorrect ripemd160 %x", ripemd160)
 		}
@@ -61,7 +72,10 @@ func TestSha256(t *testing.T) {
 // ripemd160(sha256(n))
 func TestHash160(t *testing.T) {
 	for i := 0; i < len(tests); i++ {
-		ripemd160 := hash160(tests[i].in)
+		ripemd160, err := hash160(tests[i].in)
+		if err != nil {
+			t.Errorf("hash160 failed %v", err)
+		}
 		if !bytes.Equal(ripemd160, tests[i].ripemd160) {
 			t.Fatalf("incorrect ripemd160 %x", ripemd160)
 		}

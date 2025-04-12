@@ -25,7 +25,7 @@ func (k *KeysDB) Put(scriptAddress []byte, keyPath wallet.KeyPath) error {
 	}
 	stmt, _ := tx.Prepare("insert into keys(scriptAddress, purpose, keyIndex, used) values(?,?,?,?)")
 	defer stmt.Close()
-	_, err = stmt.Exec(hex.EncodeToString(scriptAddress), int(keyPath.Purpose), keyPath.Index, 0)
+	_, err = stmt.Exec(hex.EncodeToString(scriptAddress), int(keyPath.Change), keyPath.Index, 0)
 	if err != nil {
 		tx.Rollback()
 		return err
@@ -56,7 +56,7 @@ func (k *KeysDB) MarkKeyAsUsed(scriptAddress []byte) error {
 	return nil
 }
 
-func (k *KeysDB) GetLastKeyIndex(purpose wallet.KeyPurpose) (int, bool, error) {
+func (k *KeysDB) GetLastKeyIndex(purpose wallet.KeyChange) (int, bool, error) {
 	k.lock.RLock()
 	defer k.lock.RUnlock()
 
@@ -97,13 +97,13 @@ func (k *KeysDB) GetPathForKey(scriptAddress []byte) (wallet.KeyPath, error) {
 		return wallet.KeyPath{}, errors.New("key not found")
 	}
 	p := wallet.KeyPath{
-		Purpose: wallet.KeyPurpose(purpose),
-		Index:   index,
+		Change: wallet.KeyChange(purpose),
+		Index:  index,
 	}
 	return p, nil
 }
 
-func (k *KeysDB) GetUnused(purpose wallet.KeyPurpose) ([]int, error) {
+func (k *KeysDB) GetUnused(purpose wallet.KeyChange) ([]int, error) {
 	k.lock.RLock()
 	defer k.lock.RUnlock()
 	var ret []int
@@ -142,8 +142,8 @@ func (k *KeysDB) GetAll() ([]wallet.KeyPath, error) {
 			fmt.Println(err)
 		}
 		p := wallet.KeyPath{
-			Purpose: wallet.KeyPurpose(purpose),
-			Index:   index,
+			Change: wallet.KeyChange(purpose),
+			Index:  index,
 		}
 		ret = append(ret, p)
 	}
@@ -158,10 +158,10 @@ func (k *KeysDB) GetDbg() string {
 	return ret
 }
 
-func (k *KeysDB) GetLookaheadWindows() map[wallet.KeyPurpose]int {
+func (k *KeysDB) GetLookaheadWindows() map[wallet.KeyChange]int {
 	k.lock.RLock()
 	defer k.lock.RUnlock()
-	windows := make(map[wallet.KeyPurpose]int)
+	windows := make(map[wallet.KeyChange]int)
 	for i := 0; i < 2; i++ {
 		stm := "select used from keys where purpose=" + strconv.Itoa(i) + " order by rowid desc"
 		rows, err := k.db.Query(stm)
@@ -180,7 +180,7 @@ func (k *KeysDB) GetLookaheadWindows() map[wallet.KeyPurpose]int {
 				break
 			}
 		}
-		purpose := wallet.KeyPurpose(i)
+		purpose := wallet.KeyChange(i)
 		windows[purpose] = unusedCount
 		rows.Close()
 	}

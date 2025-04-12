@@ -109,10 +109,7 @@ func (u *UtxoDB) SetWatchOnly(utxo wallet.Utxo) error {
 	defer u.lock.Unlock()
 	outpoint := utxo.Op.Hash.String() + ":" + strconv.Itoa(int(utxo.Op.Index))
 	_, err := u.db.Exec("update utxos set watchOnly=? where outpoint=?", 1, outpoint)
-	if err != nil {
-		return err
-	}
-	return nil
+	return err
 }
 
 func (u *UtxoDB) Freeze(utxo wallet.Utxo) error {
@@ -120,10 +117,7 @@ func (u *UtxoDB) Freeze(utxo wallet.Utxo) error {
 	defer u.lock.Unlock()
 	outpoint := utxo.Op.Hash.String() + ":" + strconv.Itoa(int(utxo.Op.Index))
 	_, err := u.db.Exec("update utxos set frozen=? where outpoint=?", 1, outpoint)
-	if err != nil {
-		return err
-	}
-	return nil
+	return err
 }
 
 func (u *UtxoDB) UnFreeze(utxo wallet.Utxo) error {
@@ -131,10 +125,7 @@ func (u *UtxoDB) UnFreeze(utxo wallet.Utxo) error {
 	defer u.lock.Unlock()
 	outpoint := utxo.Op.Hash.String() + ":" + strconv.Itoa(int(utxo.Op.Index))
 	_, err := u.db.Exec("update utxos set frozen=? where outpoint=?", 0, outpoint)
-	if err != nil {
-		return err
-	}
-	return nil
+	return err
 }
 
 func (u *UtxoDB) Delete(utxo wallet.Utxo) error {
@@ -142,8 +133,5 @@ func (u *UtxoDB) Delete(utxo wallet.Utxo) error {
 	defer u.lock.Unlock()
 	outpoint := utxo.Op.Hash.String() + ":" + strconv.Itoa(int(utxo.Op.Index))
 	_, err := u.db.Exec("delete from utxos where outpoint=?", outpoint)
-	if err != nil {
-		return err
-	}
-	return nil
+	return err
 }

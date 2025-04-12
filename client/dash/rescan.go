@@ -28,14 +28,14 @@ func (ec *DashElectrumClient) RescanWallet(ctx context.Context) error {
 
 	for keyIndex := 0; keyIndex <= highestKeyIndex; keyIndex++ {
 		// flip-flop internal/external to improve locality
-		for purpose := 0; purpose < 2; purpose++ {
+		for change := 0; change < 2; change++ {
 			keyPath := &wallet.KeyPath{
-				Purpose: wallet.KeyPurpose(purpose),
-				Index:   keyIndex,
+				Change: wallet.KeyChange(change),
+				Index:  keyIndex,
 			}
 			address, err := w.GetAddress(keyPath)
 			if err != nil {
-				fmt.Printf("bad address for: %d:%d\n", keyIndex, purpose)
+				fmt.Printf("bad address for: %d:%d\n", keyIndex, change)
 				continue
 			}
 			scripthash, err := addressToElectrumScripthash(address)
@@ -43,7 +43,7 @@ func (ec *DashElectrumClient) RescanWallet(ctx context.Context) error {
 				fmt.Printf("cannot make script hash for address: %s\n", address.String())
 				continue
 			}
-			// fmt.Printf("%s %s  Index:purpose %d:%d\n", address.String(), scripthash, keyIndex, purpose)
+			// fmt.Printf("%s %s  Index:change %d:%d\n", address.String(), scripthash, keyIndex, change)
 
 			history, err := node.GetHistory(ctx, scripthash)
 			if err != nil {
@@ -66,7 +66,6 @@ func (ec *DashElectrumClient) RescanWallet(ctx context.Context) error {
 				fmt.Printf("cannot make pkScript for address: %s\n", address.String())
 				continue
 			}
-			hex.EncodeToString(pkScriptBytes)
 			subscription := &wallet.Subscription{
 				PkScript:           hex.EncodeToString(pkScriptBytes),
 				ElectrumScripthash: scripthash,

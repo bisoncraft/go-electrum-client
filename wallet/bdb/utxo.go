@@ -26,11 +26,7 @@ func (u *UtxoDB) Put(utxo wallet.Utxo) error {
 		WatchOnly:    utxo.WatchOnly,
 		Frozen:       utxo.Frozen,
 	}
-	err := u.put(urec)
-	if err != nil {
-		return err
-	}
-	return nil
+	return u.put(urec)
 }
 
 // Get gets the utxo given an outpoint. Not part of the Utxo interface.

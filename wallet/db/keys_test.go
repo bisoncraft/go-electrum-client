@@ -26,8 +26,8 @@ func TestGetAll(t *testing.T) {
 		b := make([]byte, 32)
 		rand.Read(b)
 		err := kdb.Put(b, wallet.KeyPath{
-			Purpose: wallet.EXTERNAL,
-			Index:   i,
+			Change: wallet.EXTERNAL,
+			Index:  i,
 		})
 		if err != nil {
 			t.Error(err)
@@ -42,8 +42,8 @@ func TestGetAll(t *testing.T) {
 func TestPutKey(t *testing.T) {
 	b := make([]byte, 32)
 	err := kdb.Put(b, wallet.KeyPath{
-		Purpose: wallet.EXTERNAL,
-		Index:   0,
+		Change: wallet.EXTERNAL,
+		Index:  0,
 	})
 	if err != nil {
 		t.Error(err)
@@ -76,12 +76,12 @@ func TestPutKey(t *testing.T) {
 func TestPutDuplicateKey(t *testing.T) {
 	b := make([]byte, 32)
 	kdb.Put(b, wallet.KeyPath{
-		Purpose: wallet.EXTERNAL,
-		Index:   0,
+		Change: wallet.EXTERNAL,
+		Index:  0,
 	})
 	err := kdb.Put(b, wallet.KeyPath{
-		Purpose: wallet.EXTERNAL,
-		Index:   0,
+		Change: wallet.EXTERNAL,
+		Index:  0,
 	})
 	if err == nil {
 		t.Error("Expected duplicate key error")
@@ -91,8 +91,8 @@ func TestPutDuplicateKey(t *testing.T) {
 func TestMarkKeyAsUsed(t *testing.T) {
 	b := make([]byte, 33)
 	err := kdb.Put(b, wallet.KeyPath{
-		Purpose: wallet.EXTERNAL,
-		Index:   0,
+		Change: wallet.EXTERNAL,
+		Index:  0,
 	})
 	if err != nil {
 		t.Error(err)
@@ -123,8 +123,8 @@ func TestGetLastKeyIndex(t *testing.T) {
 		b := make([]byte, 32)
 		rand.Read(b)
 		err := kdb.Put(b, wallet.KeyPath{
-			Purpose: wallet.EXTERNAL,
-			Index:   i,
+			Change: wallet.EXTERNAL,
+			Index:  i,
 		})
 
 		if err != nil {
@@ -147,8 +147,8 @@ func TestGetPathForKey(t *testing.T) {
 	b := make([]byte, 32)
 	rand.Read(b)
 	err := kdb.Put(b, wallet.KeyPath{
-		Purpose: wallet.EXTERNAL,
-		Index:   15,
+		Change: wallet.EXTERNAL,
+		Index:  15,
 	})
 	if err != nil {
 		t.Error(err)
@@ -157,7 +157,7 @@ func TestGetPathForKey(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	if path.Index != 15 || path.Purpose != wallet.EXTERNAL {
+	if path.Index != 15 || path.Change != wallet.EXTERNAL {
 		t.Error("Returned incorrect key path")
 	}
 }
@@ -176,8 +176,8 @@ func TestGetUnsed(t *testing.T) {
 		b := make([]byte, 32)
 		rand.Read(b)
 		err := kdb.Put(b, wallet.KeyPath{
-			Purpose: wallet.INTERNAL,
-			Index:   i,
+			Change: wallet.INTERNAL,
+			Index:  i,
 		})
 		if err != nil {
 			t.Error(err)
@@ -197,8 +197,8 @@ func TestGetLookaheadWindows(t *testing.T) {
 		b := make([]byte, 32)
 		rand.Read(b)
 		err := kdb.Put(b, wallet.KeyPath{
-			Purpose: wallet.EXTERNAL,
-			Index:   i,
+			Change: wallet.EXTERNAL,
+			Index:  i,
 		})
 		if err != nil {
 			t.Error(err)
@@ -209,8 +209,8 @@ func TestGetLookaheadWindows(t *testing.T) {
 		b = make([]byte, 32)
 		rand.Read(b)
 		err = kdb.Put(b, wallet.KeyPath{
-			Purpose: wallet.INTERNAL,
-			Index:   1,
+			Change: wallet.INTERNAL,
+			Index:  1,
 		})
 		if err != nil {
 			t.Error(err)

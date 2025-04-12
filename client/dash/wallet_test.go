@@ -35,11 +35,7 @@ func rmTestDir() error {
 		return err
 	}
 	regtestTestDir := filepath.Join(appDir, "btc", "regtest", "test")
-	err = os.RemoveAll(regtestTestDir)
-	if err != nil {
-		return err
-	}
-	return nil
+	return os.RemoveAll(regtestTestDir)
 }
 
 // Create a new standard wallet

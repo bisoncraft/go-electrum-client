@@ -28,7 +28,7 @@ type FiroElectrumClient struct {
 	X electrumx.ElectrumX
 	// Receive tip change notify channel from electrumx
 	rcvTipChangeNotify <-chan int64
-	// Forward tip change notify to external user if regustered
+	// Forward tip change notify to external user if registered
 	sendTipChangeNotify    chan int64
 	sendTipChangeNotifyMtx sync.RWMutex
 }
@@ -44,6 +44,8 @@ func NewFiroElectrumClient(cfg *client.ClientConfig) client.ElectrumClient {
 	}
 	return &ec
 }
+
+var _ = client.ElectrumClient(&FiroElectrumClient{})
 
 //////////////////////////////////////////////////////////////////////////////
 // Interface impl
@@ -149,10 +151,11 @@ func (ec *FiroElectrumClient) CreateWallet(pw string) error {
 
 	walletCfg := ec.ClientConfig.MakeWalletConfig()
 
-	ec.Wallet, err = wltfiro.NewFiroElectrumWallet(walletCfg, pw)
-	if err != nil {
+	w, err := wltfiro.NewFiroElectrumWallet(walletCfg, pw)
+	if err == nil {
 		return err
 	}
+	ec.Wallet = w
 	return nil
 }
 
@@ -193,10 +196,11 @@ func (ec *FiroElectrumClient) LoadWallet(pw string) error {
 		return err
 	}
 	walletCfg := ec.ClientConfig.MakeWalletConfig()
-	ec.Wallet, err = wltfiro.LoadFiroElectrumWallet(walletCfg, pw)
-	if err != nil {
+	w, err := wltfiro.LoadFiroElectrumWallet(walletCfg, pw)
+	if err == nil {
 		return err
 	}
+	ec.Wallet = w
 	return nil
 }
 

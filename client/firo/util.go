@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"crypto/sha256"
 	"errors"
-	"hash"
 
 	"github.com/btcsuite/btcd/wire"
 	"github.com/decred/dcrd/crypto/ripemd160"
@@ -18,6 +17,9 @@ func newWireTx(b []byte, checkIo bool) (*wire.MsgTx, error) {
 	tx := wire.NewMsgTx(wire.TxVersion)
 	r := bytes.NewBuffer(b)
 	err := tx.Deserialize(r)
+	if err != nil {
+		return nil, err
+	}
 	if checkIo {
 		if len(tx.TxIn) == 0 {
 			return nil, errors.New("tx: no inputs")
@@ -26,7 +28,7 @@ func newWireTx(b []byte, checkIo bool) (*wire.MsgTx, error) {
 			return nil, errors.New("tx: no outputs")
 		}
 	}
-	return tx, err
+	return tx, nil
 }
 
 func serializeWireTx(tx *wire.MsgTx) ([]byte, error) {
@@ -39,13 +41,18 @@ func serializeWireTx(tx *wire.MsgTx) ([]byte, error) {
 	return w.Bytes(), nil
 }
 
-// Calculate the hash of hasher over buf.
-func calcHash(buf []byte, hasher hash.Hash) []byte {
-	_, _ = hasher.Write(buf)
-	return hasher.Sum(nil)
-}
-
-// hash160 calculates the hash ripemd160(sha256(b)).
-func hash160(buf []byte) []byte {
-	return calcHash(calcHash(buf, sha256.New()), ripemd160.New())
+func hash160(buf []byte) ([]byte, error) {
+	h := sha256.New()
+	_, err := h.Write(buf)
+	if err != nil {
+		return nil, err
+	}
+	sha := h.Sum(nil)
+	r := ripemd160.New()
+	_, err = r.Write(sha)
+	if err != nil {
+		return nil, err
+	}
+	ripeMd := r.Sum(nil)
+	return ripeMd, nil
 }

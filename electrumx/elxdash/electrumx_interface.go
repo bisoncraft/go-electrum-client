@@ -112,7 +112,7 @@ func (x *ElectrumXInterface) Start(ctx context.Context) error {
 	return nil
 }
 
-var ErrNoNetwork error = errors.New("btc: network not running")
+var ErrNoNetwork error = errors.New("dash: network not running")
 
 func (x *ElectrumXInterface) GetTip() int64 {
 	if x.network == nil {

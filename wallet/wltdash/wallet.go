@@ -227,7 +227,7 @@ func (w *DashElectrumWallet) IsDust(amount int64) bool {
 // It is used for Rescan and has no concept of gap-limit. It is expected that
 // keys made here are just temporarily used to generate addresses for rescan.
 func (w *DashElectrumWallet) GetAddress(kp *wallet.KeyPath /*, addressType*/) (btcutil.Address, error) {
-	key, err := w.keyManager.generateChildKey(kp.Purpose, uint32(kp.Index))
+	key, err := w.keyManager.generateChildKey(kp.Change, uint32(kp.Index))
 	if err != nil {
 		return nil, err
 	}
@@ -244,7 +244,7 @@ func (w *DashElectrumWallet) GetAddress(kp *wallet.KeyPath /*, addressType*/) (b
 	return segwitAddress, nil
 }
 
-func (w *DashElectrumWallet) GetUnusedAddress(purpose wallet.KeyPurpose) (btcutil.Address, error) {
+func (w *DashElectrumWallet) GetUnusedAddress(purpose wallet.KeyChange) (btcutil.Address, error) {
 	key, err := w.keyManager.GetUnusedKey(purpose)
 	if err != nil {
 		return nil, nil
@@ -436,7 +436,7 @@ func (w *DashElectrumWallet) GetTransaction(txid string) (*wallet.Txn, error) {
 	if err != nil {
 		return nil, fmt.Errorf("no such transaction")
 	}
-	return &txn, err
+	return &txn, nil
 }
 
 // Return the calculated confirmed txids and heights for an address in this

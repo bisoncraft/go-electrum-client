@@ -117,10 +117,7 @@ func (t *TxnsDB) Delete(txid string) error {
 	t.lock.Lock()
 	defer t.lock.Unlock()
 	_, err := t.db.Exec("delete from txns where txid=?", txid)
-	if err != nil {
-		return err
-	}
-	return nil
+	return err
 }
 
 func (t *TxnsDB) UpdateHeight(txid string, height int, timestamp time.Time) error {

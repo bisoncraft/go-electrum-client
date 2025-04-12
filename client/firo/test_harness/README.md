@@ -4,7 +4,7 @@ Goele test harness for ElectrumX running on regtest simnet over a single Firo no
 
 ## Usage
 
-1. Start the __src_harness.sh__ script as `source src_harness.sh` to pullin the PATH to your firo binary installation.
+1. Start the __src_harness.sh__ script as `source src_harness.sh` to pull in the PATH to your firo binary installation.
 
 2. If auto mining not required go to tmux window #3 (Ctl-b, 3) and kill the watch miner with SIGINT (Ctl-c)
 

@@ -28,7 +28,7 @@ type BtcElectrumClient struct {
 	X electrumx.ElectrumX
 	// Receive tip change notify channel from electrumx
 	rcvTipChangeNotify <-chan int64
-	// Forward tip change notify to external user if regustered
+	// Forward tip change notify to external user if registered
 	sendTipChangeNotify    chan int64
 	sendTipChangeNotifyMtx sync.RWMutex
 }
@@ -44,6 +44,8 @@ func NewBtcElectrumClient(cfg *client.ClientConfig) client.ElectrumClient {
 	}
 	return &ec
 }
+
+var _ = client.ElectrumClient(&BtcElectrumClient{})
 
 //////////////////////////////////////////////////////////////////////////////
 // Interface impl
@@ -149,10 +151,11 @@ func (ec *BtcElectrumClient) CreateWallet(pw string) error {
 
 	walletCfg := ec.ClientConfig.MakeWalletConfig()
 
-	ec.Wallet, err = wltbtc.NewBtcElectrumWallet(walletCfg, pw)
-	if err != nil {
+	w, err := wltbtc.NewBtcElectrumWallet(walletCfg, pw)
+	if err == nil {
 		return err
 	}
+	ec.Wallet = w
 	return nil
 }
 
@@ -175,11 +178,7 @@ func (ec *BtcElectrumClient) RecreateWallet(ctx context.Context, pw, mnenomic st
 	}
 	// Do a rescan because alhough we have a wallet structure with a keychain
 	// we do not have any transaction history
-	err = ec.RescanWallet(ctx)
-	if err != nil {
-		return err
-	}
-	return nil
+	return ec.RescanWallet(ctx)
 }
 
 // LoadWallet loads an existing wallet. The password is required to decrypt
@@ -193,10 +192,11 @@ func (ec *BtcElectrumClient) LoadWallet(pw string) error {
 		return err
 	}
 	walletCfg := ec.ClientConfig.MakeWalletConfig()
-	ec.Wallet, err = wltbtc.LoadBtcElectrumWallet(walletCfg, pw)
-	if err != nil {
+	w, err := wltbtc.LoadBtcElectrumWallet(walletCfg, pw)
+	if err == nil {
 		return err
 	}
+	ec.Wallet = w
 	return nil
 }
 

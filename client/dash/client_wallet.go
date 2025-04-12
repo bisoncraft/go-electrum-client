@@ -60,11 +60,7 @@ func (ec *DashElectrumClient) SyncWallet(ctx context.Context) error {
 		ec.addTxHistoryToWallet(ctx, history)
 	}
 	// start goroutine to listen for scripthash status change notifications arriving
-	err = ec.addressStatusNotify(ctx)
-	if err != nil {
-		return err
-	}
-	return nil
+	return ec.addressStatusNotify(ctx)
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -73,7 +69,7 @@ func (ec *DashElectrumClient) SyncWallet(ctx context.Context) error {
 
 // Spend tries to create a new transaction to pay an amount from the wallet to
 // toAddress. It returns Tx & Txid as hex strings and the index of any change
-// output or -1 if none.
+// output or 0 if none.
 // The wallet password is required in order to sign the tx.
 func (ec *DashElectrumClient) Spend(
 	pw string,
@@ -83,27 +79,28 @@ func (ec *DashElectrumClient) Spend(
 
 	w := ec.GetWallet()
 	if w == nil {
-		return -1, "", "", ErrNoWallet
+		return 0, "", "", ErrNoWallet
 	}
 	w.UpdateTip(ec.Tip())
 	address, err := btcutil.DecodeAddress(toAddress, ec.ClientConfig.Params)
 	if err != nil {
-		return -1, "", "", err
+		return 0, "", "", err
 	}
 	changeIndex, wireTx, err := w.Spend(pw, amount, address, feeLevel)
 	if err != nil {
-		return -1, "", "", err
+		return 0, "", "", err
 	}
 	txidHex := wireTx.TxHash().String()
 	b, err := serializeWireTx(wireTx)
 	if err != nil {
-		return -1, "", "", err
+		return 0, "", "", err
 	}
 	rawTxHex := hex.EncodeToString(b)
 	return changeIndex, rawTxHex, txidHex, nil
 }
 
-// GetPrivKeyForAddress
+// GetPrivKeyForAddress gets the wallet private key-pair as a WIF given an
+// wallet address and the wallet password.
 func (ec *DashElectrumClient) GetPrivKeyForAddress(pw, addr string) (string, error) {
 	w := ec.GetWallet()
 	if w == nil {
@@ -116,6 +113,8 @@ func (ec *DashElectrumClient) GetPrivKeyForAddress(pw, addr string) (string, err
 	return w.GetPrivKeyForAddress(pw, address)
 }
 
+// Sign an unsigned transaction with the wallet and return signed tx and
+// the change output index
 func (ec *DashElectrumClient) SignTx(pw string, txBytes []byte) ([]byte, error) {
 	w := ec.GetWallet()
 	if w == nil {
@@ -150,15 +149,15 @@ func (ec *DashElectrumClient) SignTx(pw string, txBytes []byte) ([]byte, error) 
 func (ec *DashElectrumClient) GetWalletTx(txid string) (int, bool, []byte, error) {
 	w := ec.GetWallet()
 	if w == nil {
-		return -1, false, nil, ErrNoWallet
+		return 0, false, nil, ErrNoWallet
 	}
 	txn, err := w.GetTransaction(txid)
 	if err != nil {
 		// 'no such transaction'
-		return -1, false, nil, err
+		return 0, false, nil, err
 	}
 	if txn.Height < 0 {
-		return -1, false, nil, errors.New("txns db error")
+		return 0, false, nil, errors.New("txns db error")
 	}
 	// not mined yet? return valid tx with no confs
 	if txn.Height == 0 {
@@ -174,6 +173,7 @@ func (ec *DashElectrumClient) GetWalletTx(txid string) (int, bool, []byte, error
 	return int(conf), false, txn.Bytes, nil
 }
 
+// GetWalletSpents gets spent transactions from the db.
 func (ec *DashElectrumClient) GetWalletSpents() ([]wallet.Stxo, error) {
 	w := ec.GetWallet()
 	if w == nil {
@@ -215,8 +215,8 @@ func (ec *DashElectrumClient) Broadcast(ctx context.Context, rawTx []byte) (stri
 		return "", err
 	}
 	// Find any outputs that pay back to this wallet. In particular we almost
-	// always have a change scriptaddress to watch paying back to this	 wallet
-	// after it's containing tx is broadcasted to the network by ElectrumX
+	// always have a change scriptaddress to watch paying back to this wallet
+	// after its containing tx is broadcasted to the network by ElectrumX
 	ourAddresses := w.ListAddresses()
 	isOurs := func(address btcutil.Address) bool {
 		for _, ourAddress := range ourAddresses {
@@ -234,7 +234,7 @@ func (ec *DashElectrumClient) Broadcast(ctx context.Context, rawTx []byte) (stri
 			return "", err
 		}
 		if len(addresses) != 1 {
-			return "", err
+			continue
 		}
 		if isOurs(addresses[0]) {
 			backToWallet[idx] = pkScript
@@ -260,7 +260,7 @@ func (ec *DashElectrumClient) Broadcast(ctx context.Context, rawTx []byte) (stri
 		}
 		// make wallet subscription for this output pkScript
 		scripthash := pkScriptToElectrumScripthash(pkScript)
-		_, addr := ec.pkScriptToAddressPubkeyHash(pkScript)
+		addr := ec.pkScriptToAddressPubkeyHash(pkScript)
 		newSub := wallet.Subscription{
 			PkScript:           hex.EncodeToString(pkScript),
 			ElectrumScripthash: scripthash,
@@ -320,50 +320,16 @@ func (ec *DashElectrumClient) ListFrozenUnspent() ([]wallet.Utxo, error) {
 // UnusedAddress gets a new unused wallet receive address and subscribes for
 // ElectrumX address status notify events on the returned address.
 func (ec *DashElectrumClient) UnusedAddress(ctx context.Context) (string, error) {
-	w := ec.GetWallet()
-	if w == nil {
-		return "", ErrNoWallet
-	}
-	node := ec.GetX()
-	if node == nil {
-		return "", ErrNoElectrumX
-	}
-	address, err := w.GetUnusedAddress(wallet.RECEIVING)
-	if err != nil {
-		return "", err
-	}
-	payToAddrScript, err := txscript.PayToAddrScript(address)
-	if err != nil {
-		return "", err
-	}
-	// wallet db
-	newSub := &wallet.Subscription{
-		PkScript:           hex.EncodeToString(payToAddrScript),
-		ElectrumScripthash: pkScriptToElectrumScripthash(payToAddrScript),
-		Address:            address.String(),
-	}
-	// ec.dumpSubscription("adding/updating get unused address subscription", newSub)
-	// insert or update
-	err = w.AddSubscription(newSub)
-	if err != nil {
-		return "", err
-	}
-	// request notifications from node
-	res, err := node.SubscribeScripthashNotify(ctx, newSub.ElectrumScripthash)
-	if err != nil {
-		w.RemoveSubscription(newSub.PkScript)
-		return "", err
-	}
-	if res == nil { // network error
-		w.RemoveSubscription(newSub.PkScript)
-		return "", errors.New("network: empty result")
-	}
-	return address.String(), nil
+	return ec.getNewAddress(ctx, false)
 }
 
 // ChangeAddress gets a new unused wallet change address and subscribes for
 // ElectrumX address status notify events on the returned address.
 func (ec *DashElectrumClient) ChangeAddress(ctx context.Context) (string, error) {
+	return ec.getNewAddress(ctx, true)
+}
+
+func (ec *DashElectrumClient) getNewAddress(ctx context.Context, internal bool) (string, error) {
 	w := ec.GetWallet()
 	if w == nil {
 		return "", ErrNoWallet
@@ -372,7 +338,13 @@ func (ec *DashElectrumClient) ChangeAddress(ctx context.Context) (string, error)
 	if node == nil {
 		return "", ErrNoElectrumX
 	}
-	address, err := w.GetUnusedAddress(wallet.CHANGE)
+	var address btcutil.Address
+	var err error
+	if internal {
+		address, err = w.GetUnusedAddress(wallet.CHANGE)
+	} else {
+		address, err = w.GetUnusedAddress(wallet.RECEIVING)
+	}
 	if err != nil {
 		return "", err
 	}
@@ -463,7 +435,7 @@ func (ec *DashElectrumClient) FeeRate(ctx context.Context, confTarget int64) (in
 	// node := ec.GetNode()
 	// if node != nil {
 	// 	feeRate, _ := node.EstimateFeeRate(ctx, confTarget)
-	// 	if feeRate != -1 {
+	// 	if feeRate != 0 {
 	// 		return feeRate, nil
 	// 	}
 	// }

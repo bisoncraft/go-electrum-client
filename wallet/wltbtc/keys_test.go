@@ -177,7 +177,7 @@ func TestKeyManager_GetUnusedKey(t *testing.T) {
 	}
 	var scriptAddress string
 	for script, key := range mock.keys {
-		if key.path.Purpose == wallet.EXTERNAL && key.path.Index == 0 {
+		if key.path.Change == wallet.EXTERNAL && key.path.Index == 0 {
 			scriptAddress = script
 			break
 		}

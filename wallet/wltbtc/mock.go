@@ -166,7 +166,7 @@ func (m *mockKeyStore) Put(scriptAddress []byte, keyPath wallet.KeyPath) error {
 }
 
 func (m *mockKeyStore) ImportKey(scriptAddress []byte, key *btcec.PrivateKey) error {
-	kp := wallet.KeyPath{Purpose: wallet.EXTERNAL, Index: -1}
+	kp := wallet.KeyPath{Change: wallet.EXTERNAL, Index: -1}
 	m.keys[hex.EncodeToString(scriptAddress)] = &keyStoreEntry{scriptAddress, kp, false, key}
 	return nil
 }
@@ -180,11 +180,11 @@ func (m *mockKeyStore) MarkKeyAsUsed(scriptAddress []byte) error {
 	return nil
 }
 
-func (m *mockKeyStore) GetLastKeyIndex(purpose wallet.KeyPurpose) (int, bool, error) {
+func (m *mockKeyStore) GetLastKeyIndex(purpose wallet.KeyChange) (int, bool, error) {
 	i := -1
 	used := false
 	for _, key := range m.keys {
-		if key.path.Purpose == purpose && key.path.Index > i {
+		if key.path.Change == purpose && key.path.Index > i {
 			i = key.path.Index
 			used = key.used
 		}
@@ -203,10 +203,10 @@ func (m *mockKeyStore) GetPathForKey(scriptAddress []byte) (wallet.KeyPath, erro
 	return key.path, nil
 }
 
-func (m *mockKeyStore) GetUnused(purpose wallet.KeyPurpose) ([]int, error) {
+func (m *mockKeyStore) GetUnused(purpose wallet.KeyChange) ([]int, error) {
 	var i []int
 	for _, key := range m.keys {
-		if !key.used && key.path.Purpose == purpose {
+		if !key.used && key.path.Change == purpose {
 			i = append(i, key.path.Index)
 		}
 	}
@@ -228,28 +228,28 @@ func (m *mockKeyStore) GetDbg() string {
 	return ret
 }
 
-func (m *mockKeyStore) GetLookaheadWindows() map[wallet.KeyPurpose]int {
+func (m *mockKeyStore) GetLookaheadWindows() map[wallet.KeyChange]int {
 	internalLastUsed := -1
 	externalLastUsed := -1
 	for _, key := range m.keys {
-		if key.path.Purpose == wallet.INTERNAL && key.used && key.path.Index > internalLastUsed {
+		if key.path.Change == wallet.INTERNAL && key.used && key.path.Index > internalLastUsed {
 			internalLastUsed = key.path.Index
 		}
-		if key.path.Purpose == wallet.EXTERNAL && key.used && key.path.Index > externalLastUsed {
+		if key.path.Change == wallet.EXTERNAL && key.used && key.path.Index > externalLastUsed {
 			externalLastUsed = key.path.Index
 		}
 	}
 	internalUnused := 0
 	externalUnused := 0
 	for _, key := range m.keys {
-		if key.path.Purpose == wallet.INTERNAL && !key.used && key.path.Index > internalLastUsed {
+		if key.path.Change == wallet.INTERNAL && !key.used && key.path.Index > internalLastUsed {
 			internalUnused++
 		}
-		if key.path.Purpose == wallet.EXTERNAL && !key.used && key.path.Index > externalLastUsed {
+		if key.path.Change == wallet.EXTERNAL && !key.used && key.path.Index > externalLastUsed {
 			externalUnused++
 		}
 	}
-	mp := make(map[wallet.KeyPurpose]int)
+	mp := make(map[wallet.KeyChange]int)
 	mp[wallet.INTERNAL] = internalUnused
 	mp[wallet.EXTERNAL] = externalUnused
 	return mp

@@ -108,8 +108,5 @@ func (s *SubscriptionsDB) Delete(scriptPubKey string) error {
 	s.lock.Lock()
 	defer s.lock.Unlock()
 	_, err := s.db.Exec("delete from subscriptions where scriptPubKey=?", scriptPubKey)
-	if err != nil {
-		return err
-	}
-	return nil
+	return err
 }

@@ -49,7 +49,7 @@ var hdrBadLenMore = []byte{
 
 func mkCfg() *electrumx.ElectrumXConfig {
 	return &electrumx.ElectrumXConfig{
-		Coin:    "btc",
+		Coin:    "dash",
 		NetType: "regtest",
 		DataDir: "/tmp",
 	}

@@ -5,6 +5,7 @@ import (
 	"encoding/hex"
 	"errors"
 	"fmt"
+	"os"
 	"time"
 
 	"github.com/btcsuite/btcd/btcutil"
@@ -49,7 +50,7 @@ func pkScriptToElectrumScripthash(pkScript []byte) string {
 	return hex.EncodeToString(revScriptHashBytes)
 }
 
-// addrToScripthash takes a btcutil.Address and makes an electrum 1.4 protocol 'scripthash'
+// addressToElectrumScripthash takes a btcutil.Address and makes an electrum 1.4 protocol 'scripthash'
 func addressToElectrumScripthash(address btcutil.Address) (string, error) {
 	pkScript, err := txscript.PayToAddrScript(address)
 	if err != nil {
@@ -94,7 +95,7 @@ func (ec *FiroElectrumClient) getSubscriptionForScripthash(scripthash string) (*
 	return subscription, nil
 }
 
-// getSubscriptionForScripthash
+// getSubscription gets the subscription from wallet db based on public key script; hex string.
 func (ec *FiroElectrumClient) getSubscription(scriptPubKey string) (*wallet.Subscription, error) {
 	w := ec.GetWallet()
 	if w == nil {
@@ -121,10 +122,7 @@ func (ec *FiroElectrumClient) isSubscribed(pkScript string) (bool, error) {
 	if err != nil {
 		return false, err
 	}
-	if subscription == nil {
-		return false, nil
-	}
-	return true, nil
+	return subscription == nil, nil
 }
 
 // removeSubscription removes subscription details stored the wallet db for an
@@ -176,10 +174,12 @@ func (ec *FiroElectrumClient) addressStatusNotify(ctx context.Context) error {
 				// get wallet db subscription details
 				sub, err := ec.getSubscriptionForScripthash(status.Scripthash)
 				if err != nil { // db assert  'no rows in result set'
-					panic(err)
+					fmt.Fprintf(os.Stderr, "getSubscriptionForScripthash - %v", err)
+					return
 				}
 				if sub == nil { // db assert
-					panic("no subscription for subscribed scripthash")
+					fmt.Fprintf(os.Stderr, "no subscription for subscribed scripthash")
+					return
 				}
 
 				// get scripthash history
@@ -317,16 +317,16 @@ func (ec *FiroElectrumClient) addTxHistoryToWallet(ctx context.Context, history 
 	}
 }
 
-func (ec *FiroElectrumClient) pkScriptToAddressPubkeyHash(pkScript []byte) (btcutil.Address, string) {
+func (ec *FiroElectrumClient) pkScriptToAddressPubkeyHash(pkScript []byte) string {
 	pks, err := txscript.ParsePkScript(pkScript)
 	if err != nil {
-		return nil, ""
+		return ""
 	}
 	apkh, err := pks.Address(ec.GetConfig().Params)
 	if err != nil {
-		return nil, ""
+		return ""
 	}
-	return apkh, apkh.String()
+	return apkh.String()
 }
 
 // updateWalletTip updates wallet's notion of the blockchain tip based on the

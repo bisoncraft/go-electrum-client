@@ -54,11 +54,7 @@ func (net *Network) getServers(ctx context.Context) error {
 	if len(peerResults) == 0 {
 		return nil
 	}
-	err = net.addIncomingServers(peerResults)
-	if err != nil {
-		return err
-	}
-	return nil
+	return net.addIncomingServers(peerResults)
 }
 
 // addIncomingServers converts incoming peerResults and updates memory & stored
@@ -69,15 +65,7 @@ func (net *Network) addIncomingServers(in []*peersResult) error {
 		// I have seen at least one peer on testnet return an empty list
 		return errors.New("no incoming")
 	}
-	err := net.updateNetworkServers(servers)
-	if err != nil {
-		return err
-	}
-	err = net.updateStoredServers(servers)
-	if err != nil {
-		return err
-	}
-	return nil
+	return net.updateNetworkServers(servers)
 }
 
 func makeIncomingServerAddrs(in []*peersResult) []*serverAddr {
@@ -205,11 +193,7 @@ func (net *Network) updateStoredServers(servers []*serverAddr) error {
 		}
 	}
 	stored = append(stored, tmpAdd...)
-	err = net.writeServerAddrFile(stored)
-	if err != nil {
-		return err
-	}
-	return nil
+	return net.writeServerAddrFile(stored)
 }
 
 func (net *Network) removeServer(server *serverAddr) error {

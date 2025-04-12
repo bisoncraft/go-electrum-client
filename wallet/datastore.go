@@ -175,20 +175,20 @@ type Keys interface {
 
 	// Fetch the last index for the given key purpose
 	// The bool should state whether the key has been used or not
-	GetLastKeyIndex(purpose KeyPurpose) (int, bool, error)
+	GetLastKeyIndex(purpose KeyChange) (int, bool, error)
 
 	// Returns the path for the given key
 	GetPathForKey(scriptAddress []byte) (KeyPath, error)
 
 	// Get a list of unused key indexes for the given purpose
-	GetUnused(purpose KeyPurpose) ([]int, error)
+	GetUnused(purpose KeyChange) ([]int, error)
 
 	// Fetch all key paths
 	GetAll() ([]KeyPath, error)
 
 	// Get the number of unused keys following the last used key
 	// for each key purpose.
-	GetLookaheadWindows() map[KeyPurpose]int
+	GetLookaheadWindows() map[KeyChange]int
 
 	// Debug dump
 	GetDbg() string
@@ -376,6 +376,6 @@ const (
 )
 
 type KeyPath struct {
-	Purpose KeyPurpose
-	Index   int
+	Change KeyChange
+	Index  int
 }
