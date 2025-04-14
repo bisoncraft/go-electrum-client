@@ -7,9 +7,9 @@ import (
 	"fmt"
 	"io"
 
+	"github.com/bisoncraft/go-electrum-client/electrumx"
 	"github.com/btcsuite/btcd/chaincfg/chainhash"
 	"github.com/btcsuite/btcd/wire"
-	"github.com/dev-warrior777/go-electrum-client/electrumx"
 )
 
 const (
@@ -62,8 +62,6 @@ func (d headerDeserializer) Deserialize(r io.Reader) (*electrumx.BlockHeader, er
 		return nil, err
 	}
 	blockHeader.Version = wireHdr.Version
-	// chainHash := wireHdr.BlockHash()
-	// blockHeader.Hash = electrumx.WireHash(chainHash)
 	blockHeader.Prev = electrumx.WireHash(wireHdr.PrevBlock)
 	blockHeader.Merkle = electrumx.WireHash(wireHdr.MerkleRoot)
 	return blockHeader, nil

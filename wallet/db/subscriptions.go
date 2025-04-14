@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"sync"
 
-	"github.com/dev-warrior777/go-electrum-client/wallet"
+	"github.com/bisoncraft/go-electrum-client/wallet"
 )
 
 type SubscriptionsDB struct {
@@ -108,8 +108,5 @@ func (s *SubscriptionsDB) Delete(scriptPubKey string) error {
 	s.lock.Lock()
 	defer s.lock.Unlock()
 	_, err := s.db.Exec("delete from subscriptions where scriptPubKey=?", scriptPubKey)
-	if err != nil {
-		return err
-	}
-	return nil
+	return err
 }

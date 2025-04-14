@@ -10,9 +10,9 @@ import (
 	"strings"
 	"sync"
 
+	"github.com/bisoncraft/go-electrum-client/wallet"
 	"github.com/btcsuite/btcd/btcutil"
 	"github.com/btcsuite/btcd/chaincfg"
-	"github.com/dev-warrior777/go-electrum-client/wallet"
 	bolt "go.etcd.io/bbolt"
 )
 
@@ -24,7 +24,7 @@ type KeysDB struct {
 func (k *KeysDB) Put(scriptAddress []byte, keyPath wallet.KeyPath) error {
 	krec := &keyRec{
 		ScriptAddress: scriptAddress,
-		Purpose:       int(keyPath.Purpose),
+		Purpose:       int(keyPath.Change),
 		KeyIndex:      keyPath.Index,
 		Used:          false,
 	}
@@ -42,7 +42,7 @@ func (k *KeysDB) MarkKeyAsUsed(scriptAddress []byte) error {
 
 // GetLastKeyIndex gets the last (highest) key index stored and whether it has been used.
 // If error or no records it will return -1 and error.
-func (k *KeysDB) GetLastKeyIndex(purpose wallet.KeyPurpose) (int, bool, error) {
+func (k *KeysDB) GetLastKeyIndex(purpose wallet.KeyChange) (int, bool, error) {
 	krecList, err := k.getAllSorted()
 	if err != nil {
 		return -1, false, err
@@ -69,19 +69,19 @@ func (k *KeysDB) GetPathForKey(scriptAddress []byte) (wallet.KeyPath, error) {
 	if err != nil {
 		return keyPath, err
 	}
-	keyPath.Purpose = wallet.KeyPurpose(krec.Purpose)
+	keyPath.Change = wallet.KeyChange(krec.Purpose)
 	keyPath.Index = krec.KeyIndex
 	return keyPath, nil
 }
 
-func (k *KeysDB) GetUnused(purpose wallet.KeyPurpose) ([]int, error) {
+func (k *KeysDB) GetUnused(purpose wallet.KeyChange) ([]int, error) {
 	var ret []int
 	krecList, err := k.getAllSorted()
 	if err != nil {
 		return nil, err
 	}
 	for _, krec := range krecList {
-		if purpose == wallet.KeyPurpose(krec.Purpose) && !krec.Used {
+		if purpose == wallet.KeyChange(krec.Purpose) && !krec.Used {
 			ret = append(ret, krec.KeyIndex)
 		}
 	}
@@ -96,8 +96,8 @@ func (k *KeysDB) GetAll() ([]wallet.KeyPath, error) {
 	}
 	for _, krec := range krecList {
 		keyPath := wallet.KeyPath{
-			Purpose: wallet.KeyPurpose(krec.Purpose),
-			Index:   krec.KeyIndex,
+			Change: wallet.KeyChange(krec.Purpose),
+			Index:  krec.KeyIndex,
 		}
 		ret = append(ret, keyPath)
 	}
@@ -151,8 +151,8 @@ func (k *KeysDB) GetDbg() string {
 	return ret
 }
 
-func (k *KeysDB) GetLookaheadWindows() map[wallet.KeyPurpose]int {
-	windows := make(map[wallet.KeyPurpose]int)
+func (k *KeysDB) GetLookaheadWindows() map[wallet.KeyChange]int {
+	windows := make(map[wallet.KeyChange]int)
 	krecList, err := k.getAllSorted()
 	if err != nil || len(krecList) == 0 {
 		windows[wallet.EXTERNAL] = 0

@@ -6,9 +6,9 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/bisoncraft/go-electrum-client/wallet"
 	"github.com/btcsuite/btcd/chaincfg"
 	"github.com/btcsuite/btcd/chaincfg/chainhash"
-	"github.com/dev-warrior777/go-electrum-client/wallet"
 )
 
 // Encrypted storage for btc. Stored as an encrypted blob in the wallet database.

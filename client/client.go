@@ -20,8 +20,8 @@ package client
 import (
 	"context"
 
-	"github.com/dev-warrior777/go-electrum-client/electrumx"
-	"github.com/dev-warrior777/go-electrum-client/wallet"
+	"github.com/bisoncraft/go-electrum-client/electrumx"
+	"github.com/bisoncraft/go-electrum-client/wallet"
 )
 
 type NodeType int

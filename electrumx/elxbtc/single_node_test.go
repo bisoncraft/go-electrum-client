@@ -13,7 +13,7 @@ import (
 	"testing"
 	"time"
 
-	ex "github.com/dev-warrior777/go-electrum-client/electrumx"
+	ex "github.com/bisoncraft/go-electrum-client/electrumx"
 )
 
 var (

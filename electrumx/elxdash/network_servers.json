@@ -1,0 +1,47 @@
+[
+    {
+        "net": "ssl",
+        "addr": "electrum1.cipig.net:20061",
+        "host": "electrum1.cipig.net",
+        "is_onion": false,
+        "version": "1.4",
+        "caps": "",
+        "rep": 0
+    },
+    {
+        "net": "ssl",
+        "addr": "electrum2.cipig.net:20061",
+        "host": "electrum2.cipig.net",
+        "is_onion": false,
+        "version": "1.4",
+        "caps": "",
+        "rep": 0
+    },
+    {
+        "net": "ssl",
+        "addr": "electrum3.cipig.net:20061",
+        "host": "electrum3.cipig.net",
+        "is_onion": false,
+        "version": "1.4",
+        "caps": "",
+        "rep": 0
+    },
+    {
+        "net": "ssl",
+        "addr": "dash-electrum.pshenmic.dev:50002",
+        "host": "dash-electrum.pshenmic.dev",
+        "is_onion": false,
+        "version": "1.4",
+        "caps": "",
+        "rep": 0
+    },
+    {
+      "net": "ssl",
+      "addr": "rnxogu42f3pq3e3oo7shqmh7mtema6c5fhhhsi54din4olzlu7vsx2id.onion:50002",
+      "host": "rnxogu42f3pq3e3oo7shqmh7mtema6c5fhhhsi54din4olzlu7vsx2id.onion",
+      "is_onion": true,
+      "version": "1.4",
+      "caps": "",
+      "rep": 0
+    }
+]

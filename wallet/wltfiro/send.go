@@ -8,6 +8,7 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/bisoncraft/go-electrum-client/wallet"
 	"github.com/btcsuite/btcd/btcec/v2"
 	"github.com/btcsuite/btcd/btcutil"
 	"github.com/btcsuite/btcd/btcutil/coinset"
@@ -17,7 +18,6 @@ import (
 	"github.com/btcsuite/btcd/txscript"
 	"github.com/btcsuite/btcd/wire"
 	"github.com/btcsuite/btcwallet/wallet/txauthor"
-	"github.com/dev-warrior777/go-electrum-client/wallet"
 )
 
 // secretSource is used to locate keys and redemption scripts while signing a
@@ -76,7 +76,7 @@ func newUnspentCoin(txHash *chainhash.Hash, index uint32, value btcutil.Amount, 
 	return coinset.Coin(unspent)
 }
 
-// gatherCoins aggregates acceptable utxos into a alice of coinset.Coin's
+// gatherCoins aggregates acceptable utxos into a slice of coinset.Coin's
 func (w *FiroElectrumWallet) gatherCoins(excludeUnconfirmed bool) []coinset.Coin {
 	tip := w.blockchainTip
 	utxos, _ := w.txstore.Utxos().GetAll()
@@ -109,12 +109,12 @@ func (w *FiroElectrumWallet) Spend(
 	feeLevel wallet.FeeLevel) (int, *wire.MsgTx, error) {
 
 	if ok := w.storageManager.IsValidPw(pw); !ok {
-		return -1, nil, errors.New("invalid password")
+		return 0, nil, errors.New("invalid password")
 	}
 
 	changeIndex, tx, err := w.buildTx(amount, address, feeLevel)
 	if err != nil {
-		return -1, nil, err
+		return 0, nil, err
 	}
 	return changeIndex, tx, nil
 }
@@ -127,13 +127,13 @@ func (w *FiroElectrumWallet) buildTx(
 
 	// Check for dust
 	if w.IsDust(amount) {
-		return -1, nil, wallet.ErrDustAmount
+		return 0, nil, wallet.ErrDustAmount
 	}
 
 	// check payto address
 	script, err := txscript.PayToAddrScript(address)
 	if err != nil {
-		return -1, nil, err
+		return 0, nil, err
 	}
 
 	// create input source
@@ -199,7 +199,7 @@ func (w *FiroElectrumWallet) buildTx(
 		inputSource,
 		&changeOutputsSource)
 	if err != nil {
-		return -1, nil, err
+		return 0, nil, err
 	}
 
 	// BIP 69 sorting
@@ -225,7 +225,7 @@ func (w *FiroElectrumWallet) buildTx(
 	}
 	err = txauthor.AddAllInputScripts(authoredTx.Tx, prevPkScripts, inputValues, &secretSource{w})
 	if err != nil {
-		return -1, nil, err
+		return 0, nil, err
 	}
 	return authoredTx.ChangeIndex, authoredTx.Tx, nil
 }

@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"sync"
 
+	"github.com/bisoncraft/go-electrum-client/wallet"
 	"github.com/btcsuite/btcd/wire"
-	"github.com/dev-warrior777/go-electrum-client/wallet"
 	bolt "go.etcd.io/bbolt"
 )
 
@@ -26,11 +26,7 @@ func (u *UtxoDB) Put(utxo wallet.Utxo) error {
 		WatchOnly:    utxo.WatchOnly,
 		Frozen:       utxo.Frozen,
 	}
-	err := u.put(urec)
-	if err != nil {
-		return err
-	}
-	return nil
+	return u.put(urec)
 }
 
 // Get gets the utxo given an outpoint. Not part of the Utxo interface.

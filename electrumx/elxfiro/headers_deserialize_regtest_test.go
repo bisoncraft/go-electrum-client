@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/dev-warrior777/go-electrum-client/electrumx"
+	"github.com/bisoncraft/go-electrum-client/electrumx"
 )
 
 // TODO: Get some firo regtest block headers

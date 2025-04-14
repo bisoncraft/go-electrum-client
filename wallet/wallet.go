@@ -74,7 +74,7 @@ type ElectrumWallet interface {
 	// not invloved in a transaction. Whenever the returned address has been
 	// used in a broadcasted tx this function should start returning a new,
 	// unused address.
-	GetUnusedAddress(purpose KeyPurpose) (btcutil.Address, error)
+	GetUnusedAddress(purpose KeyChange) (btcutil.Address, error)
 
 	// GetUnusedLegacyAddress returns an address suitable for receiving payments
 	// from legacy wallets, exchanges, etc. It will only give out external addr-
@@ -140,7 +140,7 @@ type ElectrumWallet interface {
 	// address basis.
 	Balance() (int64, int64, int64, error)
 
-	// Sign an unsigned transaction with the wallet and return singned tx and
+	// Sign an unsigned transaction with the wallet and return signed tx and
 	// the change output index
 	SignTx(pw string, info *SigningInfo) ([]byte, error)
 
@@ -223,11 +223,11 @@ const (
 // to other people for the purpose of receiving transactions. These may include keys used for
 // refund addresses. Internal keys are used only by the wallet, primarily for change addresses
 // but could also be used for shuffling around UTXOs.
-type KeyPurpose int
+type KeyChange int
 
 const (
-	EXTERNAL KeyPurpose = 0
-	INTERNAL KeyPurpose = 1
+	EXTERNAL KeyChange = 0
+	INTERNAL KeyChange = 1
 	// Aliases
 	RECEIVING = EXTERNAL
 	CHANGE    = INTERNAL

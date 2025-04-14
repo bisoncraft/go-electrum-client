@@ -7,13 +7,13 @@ import (
 	"path"
 	"sync"
 
-	"github.com/dev-warrior777/go-electrum-client/client"
-	"github.com/dev-warrior777/go-electrum-client/electrumx"
-	"github.com/dev-warrior777/go-electrum-client/electrumx/elxfiro"
-	"github.com/dev-warrior777/go-electrum-client/wallet"
-	"github.com/dev-warrior777/go-electrum-client/wallet/bdb"
-	"github.com/dev-warrior777/go-electrum-client/wallet/db"
-	"github.com/dev-warrior777/go-electrum-client/wallet/wltfiro"
+	"github.com/bisoncraft/go-electrum-client/client"
+	"github.com/bisoncraft/go-electrum-client/electrumx"
+	"github.com/bisoncraft/go-electrum-client/electrumx/elxfiro"
+	"github.com/bisoncraft/go-electrum-client/wallet"
+	"github.com/bisoncraft/go-electrum-client/wallet/bdb"
+	"github.com/bisoncraft/go-electrum-client/wallet/db"
+	"github.com/bisoncraft/go-electrum-client/wallet/wltfiro"
 )
 
 // FiroElectrumClient - implements ElectrumClient interface
@@ -28,7 +28,7 @@ type FiroElectrumClient struct {
 	X electrumx.ElectrumX
 	// Receive tip change notify channel from electrumx
 	rcvTipChangeNotify <-chan int64
-	// Forward tip change notify to external user if regustered
+	// Forward tip change notify to external user if registered
 	sendTipChangeNotify    chan int64
 	sendTipChangeNotifyMtx sync.RWMutex
 }
@@ -44,6 +44,8 @@ func NewFiroElectrumClient(cfg *client.ClientConfig) client.ElectrumClient {
 	}
 	return &ec
 }
+
+var _ = client.ElectrumClient(&FiroElectrumClient{})
 
 //////////////////////////////////////////////////////////////////////////////
 // Interface impl
@@ -149,10 +151,11 @@ func (ec *FiroElectrumClient) CreateWallet(pw string) error {
 
 	walletCfg := ec.ClientConfig.MakeWalletConfig()
 
-	ec.Wallet, err = wltfiro.NewFiroElectrumWallet(walletCfg, pw)
+	w, err := wltfiro.NewFiroElectrumWallet(walletCfg, pw)
 	if err != nil {
 		return err
 	}
+	ec.Wallet = w
 	return nil
 }
 
@@ -193,10 +196,11 @@ func (ec *FiroElectrumClient) LoadWallet(pw string) error {
 		return err
 	}
 	walletCfg := ec.ClientConfig.MakeWalletConfig()
-	ec.Wallet, err = wltfiro.LoadFiroElectrumWallet(walletCfg, pw)
+	w, err := wltfiro.LoadFiroElectrumWallet(walletCfg, pw)
 	if err != nil {
 		return err
 	}
+	ec.Wallet = w
 	return nil
 }
 

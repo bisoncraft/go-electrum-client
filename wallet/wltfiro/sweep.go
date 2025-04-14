@@ -4,12 +4,12 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/bisoncraft/go-electrum-client/wallet"
 	"github.com/btcsuite/btcd/btcutil"
 	"github.com/btcsuite/btcd/txscript"
 	"github.com/btcsuite/btcd/wire"
 	"github.com/btcsuite/btcwallet/wallet/txrules"
 	"github.com/decred/dcrd/dcrec/secp256k1/v4"
-	"github.com/dev-warrior777/go-electrum-client/wallet"
 )
 
 var (

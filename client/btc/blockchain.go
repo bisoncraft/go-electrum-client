@@ -4,7 +4,7 @@ import (
 	"context"
 	"errors"
 
-	"github.com/dev-warrior777/go-electrum-client/electrumx"
+	"github.com/bisoncraft/go-electrum-client/electrumx"
 )
 
 // Tip returns the headers current tip

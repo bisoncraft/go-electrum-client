@@ -6,9 +6,9 @@ import (
 	"path/filepath"
 	"testing"
 
+	"github.com/bisoncraft/go-electrum-client/client"
+	"github.com/bisoncraft/go-electrum-client/wallet"
 	"github.com/btcsuite/btcd/chaincfg"
-	"github.com/dev-warrior777/go-electrum-client/client"
-	"github.com/dev-warrior777/go-electrum-client/wallet"
 )
 
 func makeBitcoinRegtestTestConfig() (*client.ClientConfig, error) {
@@ -35,11 +35,7 @@ func rmTestDir() error {
 		return err
 	}
 	regtestTestDir := filepath.Join(appDir, "btc", "regtest", "test")
-	err = os.RemoveAll(regtestTestDir)
-	if err != nil {
-		return err
-	}
-	return nil
+	return os.RemoveAll(regtestTestDir)
 }
 
 // Create a new standard wallet

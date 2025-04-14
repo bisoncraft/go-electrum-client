@@ -4,10 +4,10 @@ import (
 	"encoding/hex"
 	"testing"
 
+	"github.com/bisoncraft/go-electrum-client/client"
+	"github.com/bisoncraft/go-electrum-client/wallet"
 	"github.com/btcsuite/btcd/btcutil/hdkeychain"
 	"github.com/btcsuite/btcd/chaincfg"
-	"github.com/dev-warrior777/go-electrum-client/client"
-	"github.com/dev-warrior777/go-electrum-client/wallet"
 )
 
 func createKeyManager() (*KeyManager, error) {
@@ -177,7 +177,7 @@ func TestKeyManager_GetUnusedKey(t *testing.T) {
 	}
 	var scriptAddress string
 	for script, key := range mock.keys {
-		if key.path.Purpose == wallet.EXTERNAL && key.path.Index == 0 {
+		if key.path.Change == wallet.EXTERNAL && key.path.Index == 0 {
 			scriptAddress = script
 			break
 		}

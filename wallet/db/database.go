@@ -5,7 +5,7 @@ import (
 	"path"
 	"sync"
 
-	"github.com/dev-warrior777/go-electrum-client/wallet"
+	"github.com/bisoncraft/go-electrum-client/wallet"
 	_ "github.com/mattn/go-sqlite3"
 )
 
@@ -101,8 +101,5 @@ func initDatabaseTables(db *sql.DB) error {
 	create table if not exists enc(key text primary key not null, value blob);
 	`
 	_, err := db.Exec(sqlStmt)
-	if err != nil {
-		return err
-	}
-	return nil
+	return err
 }

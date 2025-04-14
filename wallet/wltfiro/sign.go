@@ -7,9 +7,9 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/bisoncraft/go-electrum-client/wallet"
 	"github.com/btcsuite/btcd/txscript"
 	"github.com/btcsuite/btcd/wire"
-	"github.com/dev-warrior777/go-electrum-client/wallet"
 )
 
 const scriptDebug = false

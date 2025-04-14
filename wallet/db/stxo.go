@@ -7,9 +7,9 @@ import (
 	"strings"
 	"sync"
 
+	"github.com/bisoncraft/go-electrum-client/wallet"
 	"github.com/btcsuite/btcd/chaincfg/chainhash"
 	"github.com/btcsuite/btcd/wire"
-	"github.com/dev-warrior777/go-electrum-client/wallet"
 )
 
 type StxoDB struct {
@@ -113,8 +113,5 @@ func (s *StxoDB) Delete(stxo wallet.Stxo) error {
 	defer s.lock.Unlock()
 	outpoint := stxo.Utxo.Op.Hash.String() + ":" + strconv.Itoa(int(stxo.Utxo.Op.Index))
 	_, err := s.db.Exec("delete from stxos where outpoint=?", outpoint)
-	if err != nil {
-		return err
-	}
-	return nil
+	return err
 }

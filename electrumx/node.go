@@ -122,11 +122,7 @@ func (n *Node) start(nodeCtx context.Context, nodeCancel context.CancelCauseFunc
 		return err
 	}
 	// start scripthash notifications
-	err = n.scriptHashNotify(nodeCtx)
-	if err != nil {
-		return err
-	}
-	return nil
+	return n.scriptHashNotify(nodeCtx)
 }
 
 // promoteToLeader makes a non-leader responsible for continuing sync if not

@@ -13,11 +13,7 @@ import (
 const REWIND = 8 // reorg
 
 func (n *Node) syncHeaders(nodeCtx context.Context) error {
-	err := n.syncNetworkHeaders(nodeCtx)
-	if err != nil {
-		return err
-	}
-	return nil
+	return n.syncNetworkHeaders(nodeCtx)
 }
 
 // syncNetworkHeaders reads blockchain_headers file, then gets any missing block
