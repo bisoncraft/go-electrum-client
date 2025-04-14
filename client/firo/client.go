@@ -152,7 +152,7 @@ func (ec *FiroElectrumClient) CreateWallet(pw string) error {
 	walletCfg := ec.ClientConfig.MakeWalletConfig()
 
 	w, err := wltfiro.NewFiroElectrumWallet(walletCfg, pw)
-	if err == nil {
+	if err != nil {
 		return err
 	}
 	ec.Wallet = w
@@ -197,7 +197,7 @@ func (ec *FiroElectrumClient) LoadWallet(pw string) error {
 	}
 	walletCfg := ec.ClientConfig.MakeWalletConfig()
 	w, err := wltfiro.LoadFiroElectrumWallet(walletCfg, pw)
-	if err == nil {
+	if err != nil {
 		return err
 	}
 	ec.Wallet = w

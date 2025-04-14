@@ -152,7 +152,7 @@ func (ec *DashElectrumClient) CreateWallet(pw string) error {
 	walletCfg := ec.ClientConfig.MakeWalletConfig()
 
 	w, err := wltdash.NewDashElectrumWallet(walletCfg, pw)
-	if err == nil {
+	if err != nil {
 		return err
 	}
 	ec.Wallet = w
@@ -193,7 +193,7 @@ func (ec *DashElectrumClient) LoadWallet(pw string) error {
 	}
 	walletCfg := ec.ClientConfig.MakeWalletConfig()
 	w, err := wltdash.LoadDashElectrumWallet(walletCfg, pw)
-	if err == nil {
+	if err != nil {
 		return err
 	}
 	ec.Wallet = w

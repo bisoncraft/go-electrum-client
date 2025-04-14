@@ -152,7 +152,7 @@ func (ec *BtcElectrumClient) CreateWallet(pw string) error {
 	walletCfg := ec.ClientConfig.MakeWalletConfig()
 
 	w, err := wltbtc.NewBtcElectrumWallet(walletCfg, pw)
-	if err == nil {
+	if err != nil {
 		return err
 	}
 	ec.Wallet = w
@@ -193,7 +193,7 @@ func (ec *BtcElectrumClient) LoadWallet(pw string) error {
 	}
 	walletCfg := ec.ClientConfig.MakeWalletConfig()
 	w, err := wltbtc.LoadBtcElectrumWallet(walletCfg, pw)
-	if err == nil {
+	if err != nil {
 		return err
 	}
 	ec.Wallet = w
